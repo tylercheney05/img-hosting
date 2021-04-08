@@ -1,23 +1,18 @@
 import { useState, useEffect } from 'react';
-import { AuthConsumer } from '../../providers/AuthProvider'
-import { Form, Grid, Image, Button, Header, Container } from 'semantic-ui-react'
+import { AuthConsumer } from '../../providers/AuthProvider';
+import { Form, Grid, Image, Button, Header, Container } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
-
-const defaultImage = 'https://d30y9cdsu7xlg0.cloudfront.net/png/15724-200.png'
-
+const defaultImage = 'https://d30y9cdsu7xlg0.cloudfront.net/png/15724-200.png';
 const Profile = ({ user, updateUser }) => {
   const [editing, setEditing] = useState(false)
-  const [formVals, setFormVals] = useState({name: '', email: '', file: ''})
-
+  const [formVals, setFormVals] = useState({ name: '', email: '', file: '' })
   useEffect ( () => {
-    const {name, email, image} = user
-    setFormVals({name, email, image}) 
+    const { name, email, image } = user
+    setFormVals({ name, email, image })
   }, [])
-
   const onDrop = (files) => {
-    setFormVals({...formVals, file: files[0]})
+    setFormVals({ ...formVals, file: files[0]})
   }
-
   const profileView = () => {
     return(
       <>
@@ -31,7 +26,6 @@ const Profile = ({ user, updateUser }) => {
       </>
     )
   }
-
   const editView = () => {
     return(
       <Form onSubmit={handleSubmit}>
@@ -40,18 +34,17 @@ const Profile = ({ user, updateUser }) => {
             onDrop={onDrop}
             multiple={false}
           >
-            {({ getRootProps, getInputProps, isDragActive}) => {
-              return(
+            {({ getRootProps, getInputProps, isDragActive }) => {
+              return (
                 <div
                   {...getRootProps()}
                   style={styles.dropzone}
                 >
-                  <input {...getInputProps()} />
+                  <input {...getInputProps()} /> 
                   {
                     isDragActive ?
                     <p>File grabbed</p>
-                    :
-                    <p>Drop File Here</p>
+                    : <p>Drop Files here</p>
                   }
                 </div>
               )
@@ -59,32 +52,31 @@ const Profile = ({ user, updateUser }) => {
           </Dropzone>
         </Grid.Column>
         <Grid.Column width={8}>
-          <Form.Input 
+          <Form.Input
             label="Name"
             name="name"
             value={formVals.name}
             required
-            onChange={(e, inputAttr) => setFormVals({...formVals, name: inputAttr.value})}
+            onChange={(e, inputAttr) => setFormVals({ ...formVals, name: inputAttr.value})}
           />
-          <Form.Input 
+          <Form.Input
             label="Email"
             name="email"
             value={formVals.email}
             required
-            onChange={(e, inputAttr) => setFormVals({...formVals, email: inputAttr.value})}
+            onChange={(e, inputAttr) => setFormVals({ ...formVals, email: inputAttr.value})}
           />
+          <Button>Update</Button>
         </Grid.Column>
       </Form>
     )
   }
-
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     updateUser(user.id, formVals)
     setEditing(false)
-    setFormVals({...formVals, file: ''})
+    setFormVals({ ...formVals, file: "" })
   }
-
   return (
     <Container>
       <Grid>
@@ -92,7 +84,7 @@ const Profile = ({ user, updateUser }) => {
           { editing ? editView() : profileView() }
           <Grid.Column>
             <Button onClick={() => setEditing(!editing)}>
-              { editing ? 'Cancel' : 'Edit' }
+              { editing ? 'Cancel' : 'Edit'}
             </Button>
           </Grid.Column>
         </Grid.Row>
@@ -100,7 +92,6 @@ const Profile = ({ user, updateUser }) => {
     </Container>
   )
 }
-
 const styles = {
   dropzone: {
     height: "150px",
@@ -113,13 +104,11 @@ const styles = {
     padding: "10px",
   },
 }
-
 const ConnectedProfile = (props) => (
   <AuthConsumer>
-    { auth =>
-      <Profile {...props} {...auth} />
+    { auth => 
+      <Profile { ...props } { ...auth } />
     }
   </AuthConsumer>
 )
-
-export default ConnectedProfile
+export default ConnectedProfile;
